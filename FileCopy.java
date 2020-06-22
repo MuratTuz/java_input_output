@@ -7,9 +7,34 @@ public class FileCopy {
     public static void main(String[] args) throws IOException {
 
         //byteStreamFileCopy();
-        characterStreamFileReadWrite();
+        //characterStreamFileReadWrite();
+        characterStreamBufferedReader();
     }
 
+    public static void characterStreamBufferedReader() throws IOException {
+
+        Map<Integer, String> filemap = new TreeMap<>();
+        StringBuilder fileLine = new StringBuilder();
+
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("src/inputOutput/story-input.txt"));
+        String x = bufferedReader.readLine();
+
+
+        while (x != null){
+            fileLine.append(x);
+            createLine(fileLine, filemap);
+            x = bufferedReader.readLine();
+
+        }
+
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/inputOutput/story-input2.txt"));
+        for(Integer key : filemap.keySet()){
+            bufferedWriter.write(filemap.get(key));
+        }
+        bufferedWriter.close();
+    }
+
+    // this function puts the mixed and numbered words into an ordered state according to their numbers.
     public static void characterStreamFileReadWrite() throws IOException {
         Map<Integer, String> filemap = new TreeMap<>();
         StringBuilder fileLine = new StringBuilder();
@@ -46,11 +71,10 @@ public class FileCopy {
 
 
     public static void byteStreamFileCopy() throws IOException {
-        String file="";
 
         BufferedReader fileLocation = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Please enter the file name including the location : ");
-        file = String.valueOf(fileLocation.readLine());
+        String file = String.valueOf(fileLocation.readLine());
         InputStream inputStream = new FileInputStream(file);
 
         int fileContent = inputStream.read();
@@ -60,8 +84,9 @@ public class FileCopy {
             fileContent = inputStream.read();
         }
         inputStream.close();
-
+        // for adding a number "2" at the end of the file
         String newfile = file.substring(0,file.length()-4)+"2"+file.substring(file.length()-4);
+
         OutputStream outputStream = new FileOutputStream(newfile,false);
         int fileBytesSize = fileBytes.size();
         byte[] filewrites = new byte[fileBytesSize];
